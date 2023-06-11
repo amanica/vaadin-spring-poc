@@ -5,6 +5,7 @@ import com.example.vaadinspringpoc.data.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,13 +36,20 @@ public class PlayerService {
     }
 
     public void deletePlayer(Player player) {
+        //TODO: update ranks
         playerRepository.delete(player);
     }
 
+    @Transactional
     public void savePlayer(Player player) {
         if (player == null) {
             log.error("Player is null.");
             return;
+        }
+        if (player.getCurrentRank() == 0) {
+            // Business rule:
+            // New players will, by default, be ranked last.
+            player.setCurrentRank((int) countPlayers() + 1);
         }
         playerRepository.save(player);
     }

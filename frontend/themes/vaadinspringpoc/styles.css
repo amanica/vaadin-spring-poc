@@ -2,3 +2,10 @@ a[highlight] {
     font-weight: bold;
     text-decoration: underline;
 }
+
+@media all and (max-width: 1100px) {
+  .list-view.editing .toolbar,
+  .list-view.editing .player-grid {
+    display: none;
+  }
+}

@@ -46,6 +46,9 @@ public class PlayerListView extends VerticalLayout {
     private void configureForm() {
         form = new PlayerForm();
         form.setWidth("25em");
+        form.addSaveListener(this::savePlayer);
+        form.addDeleteListener(this::deletePlayer);
+        form.addCloseListener(e -> closeEditor());
     }
 
     private void configureGrid() {
@@ -92,6 +95,18 @@ public class PlayerListView extends VerticalLayout {
     private void addPlayer() {
         grid.asSingleSelect().clear();
         editPlayer(new Player());
+    }
+
+    private void savePlayer(PlayerForm.SaveEvent event) {
+        playerService.savePlayer(event.getPlayer());
+        updateList();
+        closeEditor();
+    }
+
+    private void deletePlayer(PlayerForm.DeleteEvent event) {
+        playerService.deletePlayer(event.getPlayer());
+        updateList();
+        closeEditor();
     }
 
     private void updateList() {

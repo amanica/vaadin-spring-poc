@@ -3,6 +3,7 @@ package com.example.vaadinspringpoc.data.entity;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,10 +26,10 @@ public class Player extends AbstractEntity {
     @NotEmpty
     private String email = "";
 
-    @NotEmpty
+    @NotNull
     private Integer gamesPlayed = 0;
 
-    @NotEmpty
+    @NotNull
     private Integer currentRank = 0;
 
 //TODO: Birthday
