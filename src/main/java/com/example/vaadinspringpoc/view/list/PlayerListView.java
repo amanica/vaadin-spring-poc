@@ -2,6 +2,7 @@ package com.example.vaadinspringpoc.view.list;
 
 import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.service.PlayerService;
+import com.example.vaadinspringpoc.view.MainLayout;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -12,7 +13,7 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "players")
+@Route(value = "players", layout= MainLayout.class)
 @PageTitle("Players | Chess club")
 public class PlayerListView extends VerticalLayout {
 
@@ -29,6 +30,7 @@ public class PlayerListView extends VerticalLayout {
         configureForm();
         add(getToolbar(), getContent());
         updateList();
+        closeEditor();
     }
 
     private Component getContent() {
@@ -51,6 +53,8 @@ public class PlayerListView extends VerticalLayout {
         grid.setSizeFull();
         grid.setColumns("firstName", "lastName", "email", "gamesPlayed", "currentRank");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+        grid.asSingleSelect().addValueChangeListener(event ->
+                editPlayer(event.getValue()));
     }
 
     private HorizontalLayout getToolbar() {
@@ -60,12 +64,34 @@ public class PlayerListView extends VerticalLayout {
         filterText.addValueChangeListener(e -> updateList());
 
         Button addPlayerButton = new Button("Add player");
+        addPlayerButton.addClickListener(click -> addPlayer());
 
         var toolbar = new HorizontalLayout(filterText, addPlayerButton);
 
         toolbar.addClassName("toolbar");
 
         return toolbar;
+    }
+
+    public void editPlayer(Player player) {
+        if (player == null) {
+            closeEditor();
+        } else {
+            form.setPlayer(player);
+            form.setVisible(true);
+            addClassName("editing");
+        }
+    }
+
+    private void closeEditor() {
+        form.setPlayer(null);
+        form.setVisible(false);
+        removeClassName("editing");
+    }
+
+    private void addPlayer() {
+        grid.asSingleSelect().clear();
+        editPlayer(new Player());
     }
 
     private void updateList() {
