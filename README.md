@@ -4,14 +4,14 @@
 The project is a standard Gradle project. 
 But it uses [**Java 17**](https://adoptium.net/en-GB/temurin/releases/).
 
-To run it from the command line:
+To run it from the command line (in the project directory):
 
 ### Linux
 first run `export JAVA_HOME="<path to jdk17>"`
 
 then run `./gradlew bootRun`
 
-### Windows
+### Windows Command Prompt
 first `set "JAVA_HOME=<path to jdk17>"`
 
 then `gradlew bootRun`
