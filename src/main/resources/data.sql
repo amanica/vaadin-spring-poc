@@ -1,3 +1,5 @@
+-- demo data, should not be loaded into proper db
+
 INSERT INTO "PLAYER" (id, version, first_name, last_name, email, games_played, current_rank) VALUES
 (1, 1, 'Magnus', 'Carlson', 'magnus.carlson@example.com', 0, 1),
 (2, 1, 'Ding', 'Liren', 'ding.liren@example.com', 0, 2),
