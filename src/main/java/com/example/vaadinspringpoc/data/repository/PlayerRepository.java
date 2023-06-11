@@ -2,6 +2,7 @@ package com.example.vaadinspringpoc.data.repository;
 
 import com.example.vaadinspringpoc.data.entity.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +17,11 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             """)
     List<Player> search(@Param("searchTerm") String searchTerm);
 
+    @Modifying
+    @Query("""
+            update Player p
+            set p.currentRank = p.currentRank - 1
+            where p.currentRank > :deletedRank
+            """)
+    void shiftRanksDown(@Param("deletedRank") Integer deletedRank);
 }

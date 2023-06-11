@@ -104,6 +104,7 @@ public class PlayerListView extends VerticalLayout {
     }
 
     private void deletePlayer(PlayerForm.DeleteEvent event) {
+        // TODO: ask for confirmation
         playerService.deletePlayer(event.getPlayer());
         updateList();
         closeEditor();

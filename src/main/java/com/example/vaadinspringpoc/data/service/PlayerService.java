@@ -35,9 +35,10 @@ public class PlayerService {
         return playerRepository.count();
     }
 
+    @Transactional
     public void deletePlayer(Player player) {
-        //TODO: update ranks
         playerRepository.delete(player);
+        playerRepository.shiftRanksDown(player.getCurrentRank());
     }
 
     @Transactional

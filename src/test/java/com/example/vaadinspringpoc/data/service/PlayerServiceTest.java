@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.junit.MatcherAssume.assumeThat;
 
@@ -61,11 +62,22 @@ class PlayerServiceTest {
 
     @Test
     void deletePlayer() {
-        //TODO
+        // given
+        List<Player> origPlayers = playerService.findAllPlayersOrderByLastname("");
+        assumeThat(origPlayers, hasSize(greaterThanOrEqualTo(6)));
+        Player playerToDelete = origPlayers.get(2);
+
+        // when
+        playerService.deletePlayer(playerToDelete);
+
+        // then
+        List<Player> allPlayersOrderByRank = playerService.findAllPlayersOrderByRank();
+        assertThat(allPlayersOrderByRank, hasSize(origPlayers.size()-1));
+        assertOrderByRankWithNoGaps(allPlayersOrderByRank);
     }
 
     @Test
-    void savePlayer() {
+    void savePlayer_givenANewPlayer() {
         //given
         int originalPlayerCount = (int) playerService.countPlayers();
         assumeThat(originalPlayerCount, greaterThan(0));
@@ -101,5 +113,26 @@ class PlayerServiceTest {
             assertThat(players.get(i).getLastName(),
                     lessThan(players.get(i + 1).getLastName()));
         }
+    }
+
+    /**
+     * Check that each player's rank is one less than the next player,
+     * also checks that each rank is in the range [1,max].
+     */
+    private void assertOrderByRankWithNoGaps(List<Player> players) {
+        for (int i = 0; i < players.size() -1; i++) {
+            Integer currentRank = players.get(i).getCurrentRank();
+            assertRankInRange(currentRank, players);
+            assertThat(currentRank,
+                    equalTo(players.get(i + 1).getCurrentRank()-1));
+        }
+        // check last player rank range as the loop above skips it.
+        Integer currentRank = players.get(players.size()-1).getCurrentRank();
+        assertRankInRange(currentRank, players);
+    }
+
+    private void assertRankInRange(Integer currentRank, List<Player> players) {
+        assertThat(currentRank, greaterThanOrEqualTo(1));
+        assertThat(currentRank, lessThanOrEqualTo(players.size()));
     }
 }
