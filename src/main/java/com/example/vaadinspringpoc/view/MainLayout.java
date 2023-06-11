@@ -1,6 +1,7 @@
 package com.example.vaadinspringpoc.view;
 
-import com.example.vaadinspringpoc.view.list.PlayerListView;
+import com.example.vaadinspringpoc.view.leaderboard.LeaderboardView;
+import com.example.vaadinspringpoc.view.players.PlayerListView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H1;
@@ -36,7 +37,8 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         addToDrawer(new VerticalLayout( 
-                new RouterLink("Players", PlayerListView.class)
+                new RouterLink("Players", PlayerListView.class),
+                new RouterLink("Leaderboard", LeaderboardView.class)
         ));
     }
 }

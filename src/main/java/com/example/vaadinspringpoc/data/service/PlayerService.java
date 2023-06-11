@@ -3,6 +3,7 @@ package com.example.vaadinspringpoc.data.service;
 import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +18,16 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    public List<Player> findAllPlayers(String stringFilter) {
+    public List<Player> findAllPlayersOrderByLastname(String stringFilter) {
         if (stringFilter == null || stringFilter.isEmpty()) { 
-            return playerRepository.findAll();
+            return playerRepository.findAll(Sort.by(Sort.Direction.ASC, "lastName"));
         } else {
             return playerRepository.search(stringFilter);
         }
+    }
+
+    public List<Player> findAllPlayersOrderByRank() {
+        return playerRepository.findAll(Sort.by(Sort.Direction.ASC, "currentRank"));
     }
 
     public long countPlayers() {

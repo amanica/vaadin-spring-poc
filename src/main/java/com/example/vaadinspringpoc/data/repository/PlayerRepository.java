@@ -8,8 +8,12 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-    @Query("select p from Player p " +
-            "where lower(p.firstName) like lower(concat('%', :searchTerm, '%')) " +
-            "or lower(p.lastName) like lower(concat('%', :searchTerm, '%'))")
+    @Query("""
+            select p from Player p
+            where lower(p.firstName) like lower(concat('%', :searchTerm, '%'))
+            or lower(p.lastName) like lower(concat('%', :searchTerm, '%'))
+            order by lastName
+            """)
     List<Player> search(@Param("searchTerm") String searchTerm);
+
 }

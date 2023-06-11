@@ -1,4 +1,4 @@
-package com.example.vaadinspringpoc.view.list;
+package com.example.vaadinspringpoc.view.players;
 
 import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.service.PlayerService;
@@ -95,6 +95,6 @@ public class PlayerListView extends VerticalLayout {
     }
 
     private void updateList() {
-        grid.setItems(playerService.findAllPlayers(filterText.getValue()));
+        grid.setItems(playerService.findAllPlayersOrderByLastname(filterText.getValue()));
     }
 }

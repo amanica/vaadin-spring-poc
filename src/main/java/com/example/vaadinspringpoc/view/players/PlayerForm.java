@@ -1,4 +1,4 @@
-package com.example.vaadinspringpoc.view.list;
+package com.example.vaadinspringpoc.view.players;
 
 import com.example.vaadinspringpoc.data.entity.Player;
 import com.vaadin.flow.component.ComponentEvent;
@@ -65,7 +65,7 @@ public class PlayerForm extends FormLayout {
     // Events
     @Getter
     public static abstract class PlayerFormEvent extends ComponentEvent<PlayerForm> {
-        private Player player;
+        private final Player player;
 
         protected PlayerFormEvent(PlayerForm source, Player player) {
             super(source, false);
