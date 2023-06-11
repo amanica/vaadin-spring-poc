@@ -29,4 +29,5 @@ Latest Long Term Support version
 
 * [Spring starter project with vaadin](https://start.spring.io/#!type=gradle-project&language=java&platformVersion=3.1.0&packaging=jar&jvmVersion=17&groupId=com.example&artifactId=vaadin-spring-poc&name=vaadin-spring-poc&description=Vaadin%20project%20for%20Spring%20Boot&packageName=com.example.vaadinspringpoc&dependencies=vaadin,lombok,devtools,configuration-processor,data-jpa,h2,validation,actuator)
 * [Vaadin tutorial](https://vaadin.com/docs/latest/tutorial)
+* [Sample Data loading issues](https://www.baeldung.com/spring-boot-data-sql-and-schema-sql)
 * [MonthDay in JPA](https://stackoverflow.com/a/60699637/381083)
