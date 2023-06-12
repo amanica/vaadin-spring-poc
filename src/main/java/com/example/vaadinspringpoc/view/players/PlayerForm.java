@@ -57,7 +57,8 @@ public class PlayerForm extends FormLayout {
     }
     
     private Component createBirthDayPickers() {
-        birthdayMonth = new ComboBox<>("Month", Month.values());
+        birthdayMonth = new ComboBox<>("Birthday Month", Month.values());
+        birthdayMonth.setRequired(false);
         birthdayMonth.setItemLabelGenerator(
                 m -> m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
         birthdayMonth.setWidth(9, Unit.EM);
@@ -66,6 +67,7 @@ public class PlayerForm extends FormLayout {
         });
 
         birthdayDay = new ComboBox<>("Day");
+        birthdayDay.setRequired(false);
         birthdayDay.setWidth(5, Unit.EM);
         birthdayDay.setEnabled(false);
 

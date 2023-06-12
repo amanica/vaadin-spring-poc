@@ -38,7 +38,7 @@ public class Player extends AbstractEntity {
     @NotNull
     private Integer currentRank = 0;
 
-    @Column(name = "date", columnDefinition = "mediumint")
+    @Column(columnDefinition = "mediumint")
     @Convert(converter = MonthDayIntegerAttributeConverter.class)
     private MonthDay birthday;
 

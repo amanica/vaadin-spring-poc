@@ -11,6 +11,9 @@ public class MonthDayIntegerAttributeConverter implements AttributeConverter<Mon
 
     @Override
     public Integer convertToDatabaseColumn(MonthDay attribute) {
+        if (attribute == null) {
+            return null;
+        }
         return (attribute.getMonthValue() * 100) + attribute.getDayOfMonth();
     }
 

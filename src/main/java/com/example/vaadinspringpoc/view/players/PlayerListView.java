@@ -14,6 +14,9 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.springframework.context.annotation.Scope;
 
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 //Only for testing:
 @org.springframework.stereotype.Component
 @Scope("prototype")
@@ -59,8 +62,12 @@ public class PlayerListView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("player-grid");
         grid.setSizeFull();
-        grid.setColumns("firstName", "lastName", "email", "birthday",
+        grid.setColumns("firstName", "lastName", "email",//"birthday",
             "gamesPlayed", "currentRank");
+        grid.addColumn(player -> player.getBirthday() == null ? "" :
+            player.getBirthdayDay() + " " +
+                player.getBirthdayMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()))
+            .setHeader("Birthday");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event ->
                 editPlayer(event.getValue()));
