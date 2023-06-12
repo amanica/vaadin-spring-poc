@@ -31,3 +31,4 @@ Latest Long Term Support version
 * [Vaadin tutorial](https://vaadin.com/docs/latest/tutorial)
 * [Sample Data loading issues](https://www.baeldung.com/spring-boot-data-sql-and-schema-sql)
 * [MonthDay in JPA](https://stackoverflow.com/a/60699637/381083)
+* [Month Day Picker](https://vaadin.com/docs/latest/components/date-picker/#picking-vs-typing)

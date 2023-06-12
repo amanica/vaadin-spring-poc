@@ -1,11 +1,14 @@
 package com.example.vaadinspringpoc.view.players;
 
 import com.example.vaadinspringpoc.data.entity.Player;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -15,11 +18,19 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class PlayerForm extends FormLayout {
 
     TextField firstName = new TextField("First name");
     TextField lastName = new TextField("Last name");
     EmailField email = new EmailField("Email");
+    ComboBox<Month> birthdayMonth;
+    ComboBox<Integer> birthdayDay;
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
@@ -29,11 +40,50 @@ public class PlayerForm extends FormLayout {
 
     public PlayerForm() {
         addClassName("player-form");
+        Component birthDayPickers = createBirthDayPickers();
+
+        binder.forField(birthdayMonth)
+                .bind(Player::getBirthdayMonth,
+                        Player::setBirthdayMonth);
+        binder.forField(birthdayDay)
+                .bind(Player::getBirthdayDay,
+                        Player::setBirthdayDay);
         binder.bindInstanceFields(this);
         add(firstName,
                 lastName,
                 email,
+                birthDayPickers,
                 createButtonsLayout());
+    }
+    
+    private Component createBirthDayPickers() {
+        birthdayMonth = new ComboBox<>("Month", Month.values());
+        birthdayMonth.setItemLabelGenerator(
+                m -> m.getDisplayName(TextStyle.FULL, Locale.getDefault()));
+        birthdayMonth.setWidth(9, Unit.EM);
+        birthdayMonth.addValueChangeListener(e -> {
+            updateBirthdayDay();
+        });
+
+        birthdayDay = new ComboBox<>("Day");
+        birthdayDay.setWidth(5, Unit.EM);
+        birthdayDay.setEnabled(false);
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout(birthdayMonth, birthdayDay);
+        return horizontalLayout;
+    }
+
+    private void updateBirthdayDay() {
+        birthdayDay.setEnabled(true);
+        if (birthdayMonth.getValue() != null) {
+            int lengthOfMonth = birthdayMonth.getValue().maxLength();
+            birthdayDay.setItems(IntStream.range(1, lengthOfMonth + 1).boxed()
+                    .collect(Collectors.toList()));
+
+            if (binder.getBean() != null) {
+                birthdayDay.setValue(binder.getBean().getBirthdayDay());
+            }
+        }
     }
 
     private HorizontalLayout createButtonsLayout() {

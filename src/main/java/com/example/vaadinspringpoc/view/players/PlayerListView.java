@@ -59,7 +59,8 @@ public class PlayerListView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("player-grid");
         grid.setSizeFull();
-        grid.setColumns("firstName", "lastName", "email", "gamesPlayed", "currentRank");
+        grid.setColumns("firstName", "lastName", "email", "birthday",
+            "gamesPlayed", "currentRank");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event ->
                 editPlayer(event.getValue()));
