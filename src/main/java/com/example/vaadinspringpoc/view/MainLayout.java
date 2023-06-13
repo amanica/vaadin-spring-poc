@@ -1,5 +1,6 @@
 package com.example.vaadinspringpoc.view;
 
+import com.example.vaadinspringpoc.view.games.GameListView;
 import com.example.vaadinspringpoc.view.leaderboard.LeaderboardView;
 import com.example.vaadinspringpoc.view.players.PlayerListView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -37,8 +38,9 @@ public class MainLayout extends AppLayout {
 
     private void createDrawer() {
         addToDrawer(new VerticalLayout( 
-                new RouterLink("Players", PlayerListView.class),
-                new RouterLink("Leaderboard", LeaderboardView.class)
+                new RouterLink("Leaderboard", LeaderboardView.class),
+                new RouterLink("Games", GameListView.class),
+                new RouterLink("Players", PlayerListView.class)
         ));
     }
 }

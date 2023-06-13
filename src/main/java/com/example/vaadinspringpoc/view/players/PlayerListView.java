@@ -64,11 +64,15 @@ public class PlayerListView extends VerticalLayout {
     private void configureGrid() {
         grid.addClassNames("player-grid");
         grid.setSizeFull();
-        grid.setColumns("firstName", "lastName", "email",//"birthday",
+        grid.setColumns("firstName", "lastName", "email",
             "gamesPlayed", "currentRank");
-        grid.addColumn(player -> player.getBirthday() == null ? "" :
-            player.getBirthdayDay() + " " +
-                player.getBirthdayMonth().getDisplayName(TextStyle.FULL, Locale.getDefault()))
+        grid.addColumn(player -> {
+                    if (player.getBirthday() == null) {
+                        return "";
+                    }
+                    return player.getBirthdayDay() + " " +
+                            player.getBirthdayMonth().getDisplayName(TextStyle.FULL, Locale.getDefault());
+                })
             .setHeader("Birthday");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event ->

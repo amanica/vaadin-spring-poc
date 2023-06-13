@@ -1,7 +1,6 @@
 package com.example.vaadinspringpoc.data.service;
 
 import com.example.vaadinspringpoc.data.entity.Player;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,10 +25,6 @@ class PlayerServiceTest {
     public static final String DUMMY_FIRST_NAME = "DummyFirstName";
     @Autowired
     PlayerService playerService;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void findAllPlayersOrderByLastname_givenBlankFilter() {

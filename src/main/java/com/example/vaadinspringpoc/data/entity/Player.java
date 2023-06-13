@@ -17,8 +17,8 @@ import java.time.MonthDay;
 
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
-@ToString(of = {"firstName", "lastName"})
+@EqualsAndHashCode(callSuper = true, of = {})
+@ToString(callSuper = true, of = {"firstName", "lastName"})
 @Entity
 public class Player extends AbstractEntity {
 
@@ -76,5 +76,9 @@ public class Player extends AbstractEntity {
         } else {
             birthday = MonthDay.of(birthday.getMonth(), day);
         }
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

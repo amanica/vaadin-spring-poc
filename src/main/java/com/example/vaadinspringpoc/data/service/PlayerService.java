@@ -31,6 +31,10 @@ public class PlayerService {
         return playerRepository.findAll(Sort.by(Sort.Direction.ASC, "currentRank"));
     }
 
+    public Player getById(Long id) {
+        return playerRepository.findById(id).orElseThrow();
+    }
+
     public long countPlayers() {
         return playerRepository.count();
     }

@@ -32,3 +32,5 @@ Latest Long Term Support version
 * [Sample Data loading issues](https://www.baeldung.com/spring-boot-data-sql-and-schema-sql)
 * [MonthDay in JPA](https://stackoverflow.com/a/60699637/381083)
 * [Month Day Picker](https://vaadin.com/docs/latest/components/date-picker/#picking-vs-typing)
+* [Enum converter](https://thorben-janssen.com/jpa-21-type-converter-better-way-to/)
+* [Bean validate players not equal](https://stackoverflow.com/a/69930984/381083)
