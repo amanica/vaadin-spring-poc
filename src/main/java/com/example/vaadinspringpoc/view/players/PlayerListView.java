@@ -4,6 +4,8 @@ import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.service.PlayerService;
 import com.example.vaadinspringpoc.view.MainLayout;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.Key;
+import com.vaadin.flow.component.KeyModifier;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -80,6 +82,8 @@ public class PlayerListView extends VerticalLayout {
         filterText.addValueChangeListener(e -> updateList());
 
         Button addPlayerButton = new Button("Add player");
+        addPlayerButton.addClickShortcut(Key.KEY_A, KeyModifier.ALT);
+        addPlayerButton.setTooltipText("Add a new player (Alt+a)");
         addPlayerButton.addClickListener(click -> addPlayer());
 
         var toolbar = new HorizontalLayout(filterText, addPlayerButton);
@@ -96,6 +100,7 @@ public class PlayerListView extends VerticalLayout {
             form.setPlayer(player);
             form.setVisible(true);
             addClassName("editing");
+            form.firstName.focus();
         }
     }
 
@@ -103,6 +108,7 @@ public class PlayerListView extends VerticalLayout {
         form.setPlayer(null);
         form.setVisible(false);
         removeClassName("editing");
+        filterText.focus();
     }
 
     private void addPlayer() {

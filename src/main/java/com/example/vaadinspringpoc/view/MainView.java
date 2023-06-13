@@ -12,6 +12,7 @@ import com.vaadin.flow.router.Route;
 @PageTitle("Main | Chess club")
 class MainView extends VerticalLayout implements BeforeEnterObserver {
     MainView() {
+        // should never be seen as the root page redirects to leaderboard
         add(new H1("Chess club administration app"));
     }
 

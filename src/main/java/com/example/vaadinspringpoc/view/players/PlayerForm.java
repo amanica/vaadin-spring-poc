@@ -94,7 +94,9 @@ public class PlayerForm extends FormLayout {
         close.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         save.addClickShortcut(Key.ENTER);
+        save.setTooltipText("Save player (ENTER)");
         close.addClickShortcut(Key.ESCAPE);
+        close.setTooltipText("Cancel (ESC)");
 
         save.addClickListener(event -> validateAndSave());
         delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
