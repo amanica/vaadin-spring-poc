@@ -89,26 +89,44 @@ public class GameService {
             lowerRankedPlayerWon = game.getResult().equals(GameResult.WHITE_WIN);
         }
 
-        Integer higherRank = higherRankedPlayer.getCurrentRank();
-        Integer lowerRank = lowerRankedPlayer.getCurrentRank();
+        int higherRank = higherRankedPlayer.getCurrentRank();
+        int lowerRank = lowerRankedPlayer.getCurrentRank();
 
         if (game.getResult().equals(DRAW)) {
             updateRanksForDraw(higherRank, lowerRank);
         } else if (lowerRankedPlayerWon) {
-            // Demote higherRanked Player by promoting the player below him
-            // (there is always a player below the higherRanked Player)
-            playerRepository.promotePlayer(higherRank + 1, higherRank);
-
-            // PROMOTE the lower ranked player halfway to higher rank
-            // the spec was a little unclear wrt if we should round up or down.
-            // I opted for rounding it i.e. 2.5 -> 3
-            playerRepository.promotePlayer(lowerRank, lowerRank - (int)Math.round((lowerRank-higherRank)/2.0));
+            updateRanksForLowerRankedPlayerWinning(higherRank, lowerRank);
         } // else higher-ranked player won, so change nothing
-
-
     }
 
-    private void updateRanksForDraw(Integer higherRank, Integer lowerRank) {
+    private void updateRanksForLowerRankedPlayerWinning(int higherRank, int lowerRank) {
+        // Demote higherRanked Player by promoting the player below him
+        // (there is always a player below the higherRanked Player)
+        playerRepository.promotePlayer(higherRank + 1, higherRank);
+
+        // (I would have not allowed demoting the higer rank by two when
+        // they are separated by 1, but the spec says *and*, so that is what I did..
+
+        // PROMOTE the lower ranked player halfway to higher rank
+        playerRepository.promotePlayer(lowerRank, lowerRank - calculateNumberOfPositionsToPromote(higherRank, lowerRank));
+    }
+
+    static int calculateNumberOfPositionsToPromote(int higherRank, int lowerRank) {
+        // the spec was a little unclear wrt if we should round up or down.
+        // I opted for rounding it down i.e. 2.5 -> 2
+        // giving this effect:
+        //    a b -> b a
+        //    a b c -> b c a   - demoting higher rank twice :O
+        //    a b c d -> b a d c
+        //    a b c d e -> b a e c d
+        // rounding up can cause weird jumps eg:
+        //    a b c -> c b a    - both move 2
+        //    a b c d -> b d a c  - both move 2
+        return (lowerRank - higherRank) / 2;
+//        return (int) Math.round((lowerRank - higherRank) / 2.0);
+    }
+
+    private void updateRanksForDraw(int higherRank, int lowerRank) {
         // move lover rank player up one if not adjacent (i.e. ranks differ by more than one)
         if (lowerRank - higherRank > 1) {
             playerRepository.promotePlayer(lowerRank, lowerRank - 1);

@@ -67,6 +67,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             SET p.currentRank = MOD(p.currentRank - :newRank + 1, :origRank - :newRank + 1) + :newRank
             WHERE p.currentRank BETWEEN :newRank AND :origRank
             """)
-    void promotePlayer(@Param("origRank") Integer origRank, @Param("newRank") Integer newRank);
+    void promotePlayer(@Param("origRank") int origRank, @Param("newRank") int newRank);
 
 }

@@ -73,12 +73,12 @@ class GameServiceTest {
     }
 
     @Test
-    void saveGame_givenNewGame_withLowerRankWinning_thenRanksDontChange() {
+    void saveGame_givenNewGame_withHigherRankWinning_thenRanksDontChange() {
         //given
         Game game = new Game();
         game.setWhitePlayer(origPlayers.get(1));
         game.setBlackPlayer(origPlayers.get(5));
-        game.setResult(GameResult.BLACK_WIN);
+        game.setResult(GameResult.WHITE_WIN);
         long origGameCount = gameService.countGames();
 
         //when
@@ -98,7 +98,7 @@ class GameServiceTest {
     }
 
     @Test
-    void saveGame_givenNewGame_withHigherRankWinning_adjacent() {
+    void saveGame_givenNewGame_withLowerRankWinning_adjacent() {
         //given
         Game game = new Game();
         game.setWhitePlayer(origPlayers.get(1));
@@ -115,7 +115,24 @@ class GameServiceTest {
     }
 
     @Test
-    void saveGame_givenNewGame_withHigherRankWinning_6appart() {
+    void saveGame_givenNewGame_withLowerRankWinning_1appart() {
+        //given
+        Game game = new Game();
+        game.setWhitePlayer(origPlayers.get(1));
+        game.setBlackPlayer(origPlayers.get(3));
+        game.setResult(GameResult.BLACK_WIN);
+        long origGameCount = gameService.countGames();
+
+        //when
+        gameService.saveGame(game);
+
+        //then loser + 1 and winner - 1
+        assertThat(getNewRank(origPlayers.get(1)), equalTo(origRanks.get(1) + 2));
+        assertThat(getNewRank(origPlayers.get(3)), equalTo(origRanks.get(3) - 1));
+    }
+
+    @Test
+    void saveGame_givenNewGame_withLowerRankWinning_6appart() {
         //given
         Game game = new Game();
         Player higherRankedPlayer = findPlayerWithOrigRank(10);
@@ -141,7 +158,7 @@ class GameServiceTest {
      * test odd difference to check what happens with rounding
      */
     @Test
-    void saveGame_givenNewGame_withHigherRankWinning_5appart() {
+    void saveGame_givenNewGame_withLowerRankWinning_5appart() {
         //given
         Game game = new Game();
         Player higherRankedPlayer = findPlayerWithOrigRank(10);
@@ -154,17 +171,13 @@ class GameServiceTest {
         //when
         gameService.saveGame(game);
 
-        //then higherRankedPlayer=loser + 1 and lowerRankedPlayer=winner -> (15-10)/2=3
+        //then higherRankedPlayer=loser + 1 and lowerRankedPlayer=winner -> (15-10)/2=2
         assertThat(getNewRank(higherRankedPlayer), equalTo(10 + 1));
-        assertThat(getNewRank(lowerRankedPlayer), equalTo(15 - 3));
+        assertThat(getNewRank(lowerRankedPlayer), equalTo(15 - 2));
         // and other players inbetween move down 1 each
         for (int i = 13; i < 14; i++) {
             assertThat(getNewRank(findPlayerWithOrigRank(i)), equalTo(i + 1));
         }
-    }
-
-    private Player findPlayerWithOrigRank(int origRank) {
-        return origPlayers.stream().filter(player -> player.getCurrentRank() == origRank).findFirst().orElseThrow();
     }
 
     @Test
@@ -219,6 +232,10 @@ class GameServiceTest {
         assertThat(getNewRank(origPlayers.get(4)), equalTo(origRanks.get(4) + 1));
         //and white move up one
         assertThat(getNewRank(origPlayers.get(5)), equalTo(origRanks.get(5) - 1));
+    }
+
+    private Player findPlayerWithOrigRank(int origRank) {
+        return origPlayers.stream().filter(player -> player.getCurrentRank() == origRank).findFirst().orElseThrow();
     }
 
     private Integer getNewRank(Player player) {
