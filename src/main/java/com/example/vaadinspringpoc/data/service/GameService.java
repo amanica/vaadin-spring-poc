@@ -95,12 +95,12 @@ public class GameService {
         if (game.getResult().equals(DRAW)) {
             updateRanksForDraw(higherRank, lowerRank);
         } else if (lowerRankedPlayerWon) {
-            //TODO:
             // Demote higherRanked Player by promoting the player below him
             // (there is always a player below the higherRanked Player)
             playerRepository.promotePlayer(higherRank + 1, higherRank);
 
             // PROMOTE the lower ranked player halfway to higher rank
+            playerRepository.promotePlayer(lowerRank, lowerRank - (lowerRank-higherRank)/2);
         } // else higher-ranked player won, so change nothing
 
 

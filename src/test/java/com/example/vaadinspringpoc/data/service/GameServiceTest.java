@@ -115,6 +115,33 @@ class GameServiceTest {
     }
 
     @Test
+    void saveGame_givenNewGame_withHigherRankWinning_6appart() {
+        //given
+        Game game = new Game();
+        Player higherRankedPlayer = findPlayerWithOrigRank(10);
+        Player lowerRankedPlayer = findPlayerWithOrigRank(16);
+        game.setWhitePlayer(higherRankedPlayer);
+        game.setBlackPlayer(lowerRankedPlayer);
+        game.setResult(GameResult.BLACK_WIN);
+        long origGameCount = gameService.countGames();
+
+        //when
+        gameService.saveGame(game);
+
+        //then higherRankedPlayer=loser + 1 and lowerRankedPlayer=winner -> (16-10)/2=3
+        assertThat(getNewRank(higherRankedPlayer), equalTo(10 + 1));
+        assertThat(getNewRank(lowerRankedPlayer), equalTo(16 - 3));
+        // and other players inbetween move down 1 each
+        for (int i = 13; i < 15; i++) {
+            assertThat(getNewRank(findPlayerWithOrigRank(i)), equalTo(i + 1));
+        }
+    }
+
+    private Player findPlayerWithOrigRank(int origRank) {
+        return origPlayers.stream().filter(player -> player.getCurrentRank() == origRank).findFirst().orElseThrow();
+    }
+
+    @Test
     void saveGame_givenNewGame_withAdjacentDraw_thenRanksDontChange() {
         //given
         Game game = new Game();
