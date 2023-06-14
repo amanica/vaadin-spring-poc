@@ -114,6 +114,22 @@ class GameServiceTest {
         assertThat(getNewRank(player5), equalTo(player5.getCurrentRank()));
     }
 
+    @Test
+    void saveGame_givenNewGame_withAdjacentDraw_thenRanksDontChange() {
+        //given
+        Game game = new Game();
+        game.setWhitePlayer(player1);
+        game.setBlackPlayer(player2);
+        game.setResult(GameResult.DRAW);
+
+        //when
+        gameService.saveGame(game);
+
+        //then ranks didn't change
+        assertThat(getNewRank(player1), equalTo(player1.getCurrentRank()));
+        assertThat(getNewRank(player2), equalTo(player2.getCurrentRank()));
+    }
+
     private Integer getNewRank(Player player) {
         return playerService.getById(player.getId()).getCurrentRank();
     }
