@@ -132,6 +132,25 @@ class GameServiceTest {
         assertThat(getNewRank(origPlayers.get(5)), equalTo(origRanks.get(5) - 1));
     }
 
+    @Test
+    void saveGame_givenNewGame_withDraw_thenWhiteLowerRankMovesUpOne() {
+        //given
+        Game game = new Game();
+        game.setWhitePlayer(origPlayers.get(5)); // white has lower rank
+        game.setBlackPlayer(origPlayers.get(1));
+        game.setResult(GameResult.DRAW);
+
+        //when
+        gameService.saveGame(game);
+
+        //then black rank didn't change
+        assertThat(getNewRank(origPlayers.get(1)), equalTo(origRanks.get(1)));
+        //and player above white moves down one
+        assertThat(getNewRank(origPlayers.get(4)), equalTo(origRanks.get(4) + 1));
+        //and white move up one
+        assertThat(getNewRank(origPlayers.get(5)), equalTo(origRanks.get(5) - 1));
+    }
+
     private Integer getNewRank(Player player) {
         return playerService.getById(player.getId()).getCurrentRank();
     }

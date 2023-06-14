@@ -42,7 +42,7 @@ public class PlayerService {
     @Transactional
     public void deletePlayer(Player player) {
         playerRepository.delete(player);
-        playerRepository.shiftRanksDown(player.getCurrentRank());
+        playerRepository.decrementRanks(player.getCurrentRank());
     }
 
     @Transactional

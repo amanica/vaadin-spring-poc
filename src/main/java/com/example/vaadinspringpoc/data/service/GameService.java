@@ -1,7 +1,6 @@
 package com.example.vaadinspringpoc.data.service;
 
 import com.example.vaadinspringpoc.data.entity.Game;
-import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.repository.GameRepository;
 import com.example.vaadinspringpoc.data.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -65,13 +64,12 @@ public class GameService {
 
             // TODO: update ranks
             if (game.getResult().equals(DRAW)) {
+                // move lover rank player up one if not adjacent
                 if (whiteStartRank < blackStartRank - 1) {
-                    Player playerToDemote = playerRepository.findByCurrentRank(blackStartRank - 1).orElseThrow();
-                    playerToDemote.setCurrentRank(blackStartRank);
-                    game.getBlackPlayer().setCurrentRank(blackStartRank - 1);
-                    playerRepository.save(playerToDemote);
-                    playerRepository.save(game.getBlackPlayer());
-                }
+                    playerRepository.promotePlayer(blackStartRank, blackStartRank - 1);
+                } else if (blackStartRank < whiteStartRank - 1) {
+                    playerRepository.promotePlayer(whiteStartRank, whiteStartRank - 1);
+                } // else adjacent, so nothing to do
             }
         } else {
             throw new IllegalArgumentException("Updating games are not supported at the moment.");

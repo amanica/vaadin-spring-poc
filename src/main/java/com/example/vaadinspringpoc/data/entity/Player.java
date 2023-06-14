@@ -36,6 +36,7 @@ public class Player extends AbstractEntity {
     private Integer gamesPlayed = 0;
 
     @NotNull
+    @Column(unique=true)
     private Integer currentRank = 0;
 
     @Column(columnDefinition = "mediumint")
