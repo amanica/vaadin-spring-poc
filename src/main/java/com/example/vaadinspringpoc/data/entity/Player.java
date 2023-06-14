@@ -35,6 +35,9 @@ public class Player extends AbstractEntity {
     @NotNull
     private Integer gamesPlayed = 0;
 
+    /**
+     * A lower value is considered a higher rank
+     */
     @NotNull
     @Column(unique=true)
     private Integer currentRank = 0;

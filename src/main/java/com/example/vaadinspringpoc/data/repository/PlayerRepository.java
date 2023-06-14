@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Query("""
@@ -70,8 +69,4 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             """)
     void promotePlayer(@Param("origRank") Integer origRank, @Param("newRank") Integer newRank);
 
-    /**
-     * Not returning a list because if the data is in a valid state, there should only be one player at any given rank.
-     */
-    Optional<Player> findByCurrentRank(Integer currentRank);
 }

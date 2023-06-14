@@ -1,6 +1,7 @@
 package com.example.vaadinspringpoc.data.service;
 
 import com.example.vaadinspringpoc.data.entity.Game;
+import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.repository.GameRepository;
 import com.example.vaadinspringpoc.data.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -56,24 +57,40 @@ public class GameService {
         if (game.getId() == null) {
             // new game
             game.setDateTime(LocalDateTime.now());
-            Integer whiteStartRank = game.getWhitePlayer().getCurrentRank();
-            game.setWhiteStartRank(whiteStartRank);
+            game.setWhiteStartRank(game.getWhitePlayer().getCurrentRank());
+            game.setBlackStartRank(game.getBlackPlayer().getCurrentRank());
 
-            Integer blackStartRank = game.getBlackPlayer().getCurrentRank();
-            game.setBlackStartRank(blackStartRank);
-
-            // TODO: update ranks
-            if (game.getResult().equals(DRAW)) {
-                // move lover rank player up one if not adjacent
-                if (whiteStartRank < blackStartRank - 1) {
-                    playerRepository.promotePlayer(blackStartRank, blackStartRank - 1);
-                } else if (blackStartRank < whiteStartRank - 1) {
-                    playerRepository.promotePlayer(whiteStartRank, whiteStartRank - 1);
-                } // else adjacent, so nothing to do
-            }
+            updateRanks(game);
         } else {
             throw new IllegalArgumentException("Updating games are not supported at the moment.");
         }
         gameRepository.save(game);
+    }
+
+    private void updateRanks(Game game) {
+        Player whitePlayer = game.getWhitePlayer();
+        Player blackPlayer = game.getBlackPlayer();
+        final Player higherRankedPlayer, lowerRankedPlayer;
+        // higher rank has lower number!
+        if (whitePlayer.getCurrentRank() < blackPlayer.getCurrentRank()) {
+            higherRankedPlayer = whitePlayer;
+            lowerRankedPlayer = blackPlayer;
+        } else {
+            higherRankedPlayer = blackPlayer;
+            lowerRankedPlayer = whitePlayer;
+        }
+
+        // TODO: update ranks
+        if (game.getResult().equals(DRAW)) {
+            updateRanksForDraw(higherRankedPlayer.getCurrentRank(),
+                    lowerRankedPlayer.getCurrentRank());
+        }
+    }
+
+    private void updateRanksForDraw(Integer higherRank, Integer lowerRank) {
+        // move lover rank player up one if not adjacent (i.e. ranks differ by more than one)
+        if (lowerRank - higherRank > 1) {
+            playerRepository.promotePlayer(lowerRank, lowerRank - 1);
+        } // else adjacent, so nothing to do
     }
 }
