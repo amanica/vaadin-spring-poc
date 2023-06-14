@@ -84,7 +84,7 @@ class GameServiceTest {
         //when
         gameService.saveGame(game);
 
-        //then the came persisted and retrieved correctly
+        //then the game persisted and retrieved correctly
         assertThat(gameService.countGames(), equalTo(origGameCount + 1));
         Game newGame = gameService.findAllGamesOrderByDateDesc().get(0);
         assertThat(newGame.getWhitePlayer(), equalTo(origPlayers.get(1)));
@@ -95,6 +95,23 @@ class GameServiceTest {
         //and ranks didn't change
         assertThat(getNewRank(origPlayers.get(1)), equalTo(origRanks.get(1)));
         assertThat(getNewRank(origPlayers.get(5)), equalTo(origRanks.get(5)));
+    }
+
+    @Test
+    void saveGame_givenNewGame_withHigherRankWinning_adjacent() {
+        //given
+        Game game = new Game();
+        game.setWhitePlayer(origPlayers.get(1));
+        game.setBlackPlayer(origPlayers.get(2));
+        game.setResult(GameResult.BLACK_WIN);
+        long origGameCount = gameService.countGames();
+
+        //when
+        gameService.saveGame(game);
+
+        //then loser + 1 and winner - 1
+        assertThat(getNewRank(origPlayers.get(1)), equalTo(origRanks.get(1) + 1));
+        assertThat(getNewRank(origPlayers.get(2)), equalTo(origRanks.get(2) - 1));
     }
 
     @Test
