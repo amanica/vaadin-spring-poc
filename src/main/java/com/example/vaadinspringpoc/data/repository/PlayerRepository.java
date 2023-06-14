@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Query("""
@@ -24,4 +25,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             where p.currentRank > :deletedRank
             """)
     void shiftRanksDown(@Param("deletedRank") Integer deletedRank);
+
+    /**
+     * Not returning a list because if the data is in a valid state, there should only be one player at any given rank.
+     */
+    Optional<Player> findByCurrentRank(Integer currentRank);
 }
