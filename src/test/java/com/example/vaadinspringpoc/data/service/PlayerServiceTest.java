@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.containsStringIgnoringCase;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -44,13 +44,13 @@ class PlayerServiceTest {
     @Test
     void findAllPlayersOrderByLastname_givenNonBlankFilter() {
         // given
-        var filter = "an";
+        var filter = "ani";
 
         // when
         List<Player> filteredPlayersOrderByLastname = playerService.findAllPlayersOrderByLastname(filter);
 
         // then
-        assertThat(filteredPlayersOrderByLastname, hasSize(3));
+        assertThat(filteredPlayersOrderByLastname, hasSize(2));
         assertFirstNameContains(filteredPlayersOrderByLastname, filter);
         assertOrderByLastName(filteredPlayersOrderByLastname);
     }
@@ -95,7 +95,7 @@ class PlayerServiceTest {
 
     private void assertFirstNameContains(List<Player> players, String needle) {
         for (Player player : players) {
-            assertThat(player.getFirstName(), containsString(needle));
+            assertThat(player.getFirstName(), containsStringIgnoringCase(needle));
         }
         for (int i = 0; i < players.size() -1; i++) {
             assertThat(players.get(i).getLastName(),

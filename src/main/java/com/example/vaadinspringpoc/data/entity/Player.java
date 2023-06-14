@@ -85,4 +85,8 @@ public class Player extends AbstractEntity {
     public String getFullName() {
         return firstName + " " + lastName;
     }
+
+    public String getFullNameAndRank() {
+        return firstName + " " + lastName + " (" +currentRank + ")";
+    }
 }

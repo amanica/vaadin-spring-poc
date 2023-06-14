@@ -70,9 +70,9 @@ public class GameListView extends VerticalLayout {
         grid.removeAllColumns();
         grid.addColumn(game -> game.getDateTime().format(DATE_TIME_FORMATTER))
                 .setHeader("Date Time");
-        grid.addColumns("whitePlayer.fullName", "blackPlayer.fullName", "result.caption");
-        grid.getColumnByKey("whitePlayer.fullName").setHeader("White");
-        grid.getColumnByKey("blackPlayer.fullName").setHeader("Black");
+        grid.addColumns("whitePlayer.fullNameAndRank", "blackPlayer.fullNameAndRank", "result.caption");
+        grid.getColumnByKey("whitePlayer.fullNameAndRank").setHeader("White");
+        grid.getColumnByKey("blackPlayer.fullNameAndRank").setHeader("Black");
         grid.getColumnByKey("result.caption").setHeader("Result");
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
         grid.asSingleSelect().addValueChangeListener(event ->

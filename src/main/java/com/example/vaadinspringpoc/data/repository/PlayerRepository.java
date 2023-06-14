@@ -10,10 +10,10 @@ import java.util.List;
 
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Query("""
-            select p from Player p
-            where lower(p.firstName) like lower(concat('%', :searchTerm, '%'))
-            or lower(p.lastName) like lower(concat('%', :searchTerm, '%'))
-            order by lastName
+            SELECT p FROM Player p
+            WHERE LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))
+            OR LOWER(p.lastName) LIKE LOWER(CONCAT('%', :searchTerm, '%'))
+            ORDER BY lastName
             """)
     List<Player> search(@Param("searchTerm") String searchTerm);
 
@@ -22,9 +22,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      */
     @Modifying
     @Query("""
-            update Player p
-            set p.currentRank = p.currentRank - 1
-            where p.currentRank > :exclusiveLowerBound
+            UPDATE Player p
+            SET p.currentRank = p.currentRank - 1
+            WHERE p.currentRank > :exclusiveLowerBound
             """)
     void decrementRanks(@Param("exclusiveLowerBound") Integer exclusiveLowerBound);
 
@@ -63,9 +63,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
      */
     @Modifying
     @Query("""
-            update Player p
-            set p.currentRank = MOD(p.currentRank - :newRank + 1, :origRank - :newRank + 1) + :newRank
-            where p.currentRank BETWEEN :newRank AND :origRank
+            UPDATE Player p
+            SET p.currentRank = MOD(p.currentRank - :newRank + 1, :origRank - :newRank + 1) + :newRank
+            WHERE p.currentRank BETWEEN :newRank AND :origRank
             """)
     void promotePlayer(@Param("origRank") Integer origRank, @Param("newRank") Integer newRank);
 

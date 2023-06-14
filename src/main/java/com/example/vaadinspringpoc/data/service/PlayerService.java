@@ -1,6 +1,7 @@
 package com.example.vaadinspringpoc.data.service;
 
 import com.example.vaadinspringpoc.data.entity.Player;
+import com.example.vaadinspringpoc.data.repository.GameRepository;
 import com.example.vaadinspringpoc.data.repository.PlayerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -14,9 +15,11 @@ import java.util.List;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
 
-    public PlayerService(PlayerRepository playerRepository) {
+    public PlayerService(PlayerRepository playerRepository, GameRepository gameRepository) {
         this.playerRepository = playerRepository;
+        this.gameRepository = gameRepository;
     }
 
     public List<Player> findAllPlayersOrderByLastname(String stringFilter) {
@@ -41,6 +44,7 @@ public class PlayerService {
 
     @Transactional
     public void deletePlayer(Player player) {
+        gameRepository.deleteAll(gameRepository.findGamesByPlayer(player));
         playerRepository.delete(player);
         playerRepository.decrementRanks(player.getCurrentRank());
     }

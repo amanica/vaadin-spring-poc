@@ -1,6 +1,7 @@
 package com.example.vaadinspringpoc.data.service;
 
 import com.example.vaadinspringpoc.data.entity.Game;
+import com.example.vaadinspringpoc.data.entity.GameResult;
 import com.example.vaadinspringpoc.data.entity.Player;
 import com.example.vaadinspringpoc.data.repository.GameRepository;
 import com.example.vaadinspringpoc.data.repository.PlayerRepository;
@@ -39,6 +40,10 @@ public class GameService {
         return gameRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"));
     }
 
+    public List<Game> findAllGamesByPlayer() {
+        return gameRepository.findAll(Sort.by(Sort.Direction.DESC, "dateTime"));
+    }
+
     public long countGames() {
         return gameRepository.count();
     }
@@ -71,20 +76,27 @@ public class GameService {
         Player whitePlayer = game.getWhitePlayer();
         Player blackPlayer = game.getBlackPlayer();
         final Player higherRankedPlayer, lowerRankedPlayer;
+        boolean lowerRankedPlayerWon;
+
         // higher rank has lower number!
         if (whitePlayer.getCurrentRank() < blackPlayer.getCurrentRank()) {
             higherRankedPlayer = whitePlayer;
             lowerRankedPlayer = blackPlayer;
+            lowerRankedPlayerWon = game.getResult().equals(GameResult.BLACK_WIN);
         } else {
             higherRankedPlayer = blackPlayer;
             lowerRankedPlayer = whitePlayer;
+            lowerRankedPlayerWon = game.getResult().equals(GameResult.WHITE_WIN);
         }
 
-        // TODO: update ranks
         if (game.getResult().equals(DRAW)) {
             updateRanksForDraw(higherRankedPlayer.getCurrentRank(),
                     lowerRankedPlayer.getCurrentRank());
-        }
+        } else if (lowerRankedPlayerWon) {
+            //TODO:
+        } // else higher-ranked player won, so change nothing
+
+
     }
 
     private void updateRanksForDraw(Integer higherRank, Integer lowerRank) {

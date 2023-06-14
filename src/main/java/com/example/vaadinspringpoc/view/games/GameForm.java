@@ -36,12 +36,12 @@ public class GameForm extends FormLayout {
         createFields(players);
         binder.forField(whitePlayer)
                 .withValidator(
-                        player -> !player.equals(blackPlayer.getValue()),
+                        player -> player != null && !player.equals(blackPlayer.getValue()),
                         "Game needs two (distinct) players.")
                 .bind(Game::getWhitePlayer, Game::setWhitePlayer);
         binder.forField(blackPlayer)
                 .withValidator(
-                        player -> !player.equals(whitePlayer.getValue()),
+                        player -> player != null && !player.equals(whitePlayer.getValue()),
                         "Game needs two (distinct) players.")
                 .bind(Game::getBlackPlayer, Game::setBlackPlayer);
         binder.bindInstanceFields(this);
@@ -57,8 +57,8 @@ public class GameForm extends FormLayout {
         blackPlayer = new ComboBox<>("Black", players);
         result = new RadioButtonGroup<>("Result", GameResult.values());
 
-        whitePlayer.setItemLabelGenerator(Player::getFullName);
-        blackPlayer.setItemLabelGenerator(Player::getFullName);
+        whitePlayer.setItemLabelGenerator(Player::getFullNameAndRank);
+        blackPlayer.setItemLabelGenerator(Player::getFullNameAndRank);
         result.setItemLabelGenerator(GameResult::getCaption);
     }
 
