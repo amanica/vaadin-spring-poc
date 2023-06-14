@@ -137,6 +137,32 @@ class GameServiceTest {
         }
     }
 
+    /**
+     * test odd difference to check what happens with rounding
+     */
+    @Test
+    void saveGame_givenNewGame_withHigherRankWinning_5appart() {
+        //given
+        Game game = new Game();
+        Player higherRankedPlayer = findPlayerWithOrigRank(10);
+        Player lowerRankedPlayer = findPlayerWithOrigRank(15);
+        game.setWhitePlayer(higherRankedPlayer);
+        game.setBlackPlayer(lowerRankedPlayer);
+        game.setResult(GameResult.BLACK_WIN);
+        long origGameCount = gameService.countGames();
+
+        //when
+        gameService.saveGame(game);
+
+        //then higherRankedPlayer=loser + 1 and lowerRankedPlayer=winner -> (15-10)/2=3
+        assertThat(getNewRank(higherRankedPlayer), equalTo(10 + 1));
+        assertThat(getNewRank(lowerRankedPlayer), equalTo(15 - 3));
+        // and other players inbetween move down 1 each
+        for (int i = 13; i < 14; i++) {
+            assertThat(getNewRank(findPlayerWithOrigRank(i)), equalTo(i + 1));
+        }
+    }
+
     private Player findPlayerWithOrigRank(int origRank) {
         return origPlayers.stream().filter(player -> player.getCurrentRank() == origRank).findFirst().orElseThrow();
     }

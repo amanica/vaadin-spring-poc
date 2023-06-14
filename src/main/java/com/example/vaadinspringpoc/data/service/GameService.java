@@ -100,7 +100,9 @@ public class GameService {
             playerRepository.promotePlayer(higherRank + 1, higherRank);
 
             // PROMOTE the lower ranked player halfway to higher rank
-            playerRepository.promotePlayer(lowerRank, lowerRank - (lowerRank-higherRank)/2);
+            // the spec was a little unclear wrt if we should round up or down.
+            // I opted for rounding it i.e. 2.5 -> 3
+            playerRepository.promotePlayer(lowerRank, lowerRank - (int)Math.round((lowerRank-higherRank)/2.0));
         } // else higher-ranked player won, so change nothing
 
 
