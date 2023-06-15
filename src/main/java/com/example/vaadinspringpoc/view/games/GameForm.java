@@ -31,9 +31,9 @@ public class GameForm extends FormLayout {
 
     Binder<Game> binder = new BeanValidationBinder<>(Game.class);
 
-    public GameForm(List<Player> players) {
+    public GameForm() {
         addClassName("game-form");
-        createFields(players);
+        createFields();
         binder.forField(whitePlayer)
                 .withValidator(
                         player -> player != null && !player.equals(blackPlayer.getValue()),
@@ -52,14 +52,19 @@ public class GameForm extends FormLayout {
             createButtonsLayout());
     }
 
-    private void createFields(List<Player> players) {
-        whitePlayer = new ComboBox<>("White", players);
-        blackPlayer = new ComboBox<>("Black", players);
+    private void createFields() {
+        whitePlayer = new ComboBox<>("White");
+        blackPlayer = new ComboBox<>("Black");
         result = new RadioButtonGroup<>("Result", GameResult.values());
 
         whitePlayer.setItemLabelGenerator(Player::getFullNameAndRank);
         blackPlayer.setItemLabelGenerator(Player::getFullNameAndRank);
         result.setItemLabelGenerator(GameResult::getCaption);
+    }
+
+    public void setPlayers(List<Player> players) {
+        whitePlayer.setItems(players);
+        blackPlayer.setItems(players);
     }
 
     private HorizontalLayout createButtonsLayout() {
@@ -82,7 +87,7 @@ public class GameForm extends FormLayout {
     }
 
     private void validateAndSave() {
-        if (binder.isValid() && binder.validate().isOk()) {
+        if (binder.isValid()) {
             fireEvent(new SaveEvent(this, binder.getBean()));
         }
     }

@@ -57,7 +57,7 @@ public class GameListView extends VerticalLayout {
     }
 
     private void configureForm() {
-        form = new GameForm(playerService.findAllPlayersOrderByLastname(null));
+        form = new GameForm();
         form.setWidth("25em");
         form.addSaveListener(this::saveGame);
 //        form.addDeleteListener(this::deleteGame);
@@ -101,6 +101,7 @@ public class GameListView extends VerticalLayout {
         if (game == null) {
             closeEditor();
         } else {
+            form.setPlayers(playerService.findAllPlayersOrderByLastname(null));
             form.setGame(game);
             form.setVisible(true);
             form.setEnabled(false);
@@ -130,7 +131,6 @@ public class GameListView extends VerticalLayout {
 
 // Delete is not supported at the moment, maybe it can be supported in future
 //    private void deleteGame(GameForm.DeleteEvent event) {
-//        // TODO: ask for confirmation
 //        gameService.deleteGame(event.getGame());
 //        updateList();
 //        closeEditor();

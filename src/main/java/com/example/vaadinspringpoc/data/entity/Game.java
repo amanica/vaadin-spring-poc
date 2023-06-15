@@ -32,7 +32,7 @@ public class Game extends AbstractEntity {
     @NotNull
     private Player blackPlayer;
 
-    @NotNull
+    @NotNull(message="Every game needs a result")
     private GameResult result;
 
     @NotNull

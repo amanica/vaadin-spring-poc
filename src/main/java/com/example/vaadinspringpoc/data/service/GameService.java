@@ -112,16 +112,18 @@ public class GameService {
     }
 
     static int calculateNumberOfPositionsToPromote(int higherRank, int lowerRank) {
-        // the spec was a little unclear wrt if we should round up or down.
-        // I opted for rounding it down i.e. 2.5 -> 2
-        // giving this effect:
-        //    a b -> b a
-        //    a b c -> b c a   - demoting higher rank twice :O
-        //    a b c d -> b a d c
-        //    a b c d e -> b a e c d
-        // rounding up can cause weird jumps eg:
-        //    a b c -> c b a    - both move 2
-        //    a b c d -> b d a c  - both move 2
+        /*
+         the spec was a little unclear wrt if we should round up or down.
+         I opted for rounding it down i.e. 2.5 -> 2
+         giving this effect:
+            a b -> b a
+            a b c -> b c a   - demoting higher rank twice :O
+            a b c d -> b a d c
+            a b c d e -> b a e c d
+         rounding up can cause weird jumps eg:
+            a b c -> c b a    - both move 2
+            a b c d -> b d a c  - both move 2
+        */
         return (lowerRank - higherRank) / 2;
 //        return (int) Math.round((lowerRank - higherRank) / 2.0);
     }
