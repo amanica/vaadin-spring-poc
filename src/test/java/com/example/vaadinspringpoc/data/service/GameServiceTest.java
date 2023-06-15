@@ -80,6 +80,8 @@ class GameServiceTest {
         game.setBlackPlayer(origPlayers.get(5));
         game.setResult(GameResult.WHITE_WIN);
         long origGameCount = gameService.countGames();
+        int whiteOrigGamesPlayed = origPlayers.get(1).getGamesPlayed();
+        int blackOrigGamesPlayed = origPlayers.get(5).getGamesPlayed();
 
         //when
         gameService.saveGame(game);
@@ -91,6 +93,8 @@ class GameServiceTest {
         assertThat(newGame.getBlackPlayer(), equalTo(origPlayers.get(5)));
         assertThat(newGame.getWhiteStartRank(), equalTo(origRanks.get(1)));
         assertThat(newGame.getBlackStartRank(), equalTo(origRanks.get(5)));
+        assertThat(getNewGamesPlayed(origPlayers.get(1)), equalTo(whiteOrigGamesPlayed + 1));
+        assertThat(getNewGamesPlayed(origPlayers.get(5)), equalTo(blackOrigGamesPlayed + 1));
 
         //and ranks didn't change
         assertThat(getNewRank(origPlayers.get(1)), equalTo(origRanks.get(1)));
@@ -240,5 +244,9 @@ class GameServiceTest {
 
     private Integer getNewRank(Player player) {
         return playerService.getById(player.getId()).getCurrentRank();
+    }
+
+    private Integer getNewGamesPlayed(Player player) {
+        return playerService.getById(player.getId()).getGamesPlayed();
     }
 }

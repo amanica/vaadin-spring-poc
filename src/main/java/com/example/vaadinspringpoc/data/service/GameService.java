@@ -54,16 +54,24 @@ public class GameService {
             log.error("Game is null.");
             return;
         }
+        Player whitePlayer = game.getWhitePlayer();
+        Player blackPlayer = game.getBlackPlayer();
+
         if (!game.isGameWithDifferentPlayers()) {
             throw new IllegalArgumentException("Game with the same player for white and black is not valid: "
-                    + game.getWhitePlayer().getFullName());
+                    + whitePlayer.getFullName());
         }
         Objects.requireNonNull(game.getResult());
         if (game.getId() == null) {
             // new game
             game.setDateTime(LocalDateTime.now());
-            game.setWhiteStartRank(game.getWhitePlayer().getCurrentRank());
-            game.setBlackStartRank(game.getBlackPlayer().getCurrentRank());
+            game.setWhiteStartRank(whitePlayer.getCurrentRank());
+            game.setBlackStartRank(blackPlayer.getCurrentRank());
+
+            whitePlayer.setGamesPlayed(whitePlayer.getGamesPlayed() + 1);
+            blackPlayer.setGamesPlayed(blackPlayer.getGamesPlayed() + 1);
+            playerRepository.save(whitePlayer);
+            playerRepository.save(blackPlayer);
 
             updateRanks(game);
         } else {
