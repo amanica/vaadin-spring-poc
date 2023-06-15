@@ -9,6 +9,7 @@ import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
@@ -99,11 +100,25 @@ public class PlayerForm extends FormLayout {
         close.setTooltipText("Cancel (ESC)");
 
         save.addClickListener(event -> validateAndSave());
-        delete.addClickListener(event -> fireEvent(new DeleteEvent(this, binder.getBean())));
+        delete.addClickListener(event -> confirmDeletion());
         close.addClickListener(event -> fireEvent(new CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
         return new HorizontalLayout(save, delete, close);
+    }
+
+    private void confirmDeletion() {
+        ConfirmDialog dialog = new ConfirmDialog();
+        dialog.setHeader("Confirm deletion of player");
+        Player player = binder.getBean();
+        dialog.setText(
+                "Are you sure that you want to delete: " + player.getFullNameAndRank() + "?");
+
+        dialog.setCancelable(true);
+
+        dialog.setConfirmText("Delete");
+        dialog.addConfirmListener(event -> fireEvent(new DeleteEvent(this, player)));
+        dialog.open();
     }
 
     private void validateAndSave() {
